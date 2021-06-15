@@ -14,7 +14,7 @@ timesteps = 100
 step_per_batch = 200
 time_interval = 16
 deep = 3
-train_able = False
+train_able = True
 # 클래스 숫자
 n_class = 5
 
@@ -46,9 +46,9 @@ def train_data_processing(data):
     t, f = data.shape
     start = random.randint(0, t - timesteps - 1)
     input_data = np.reshape(data[start: start + timesteps, 0], (1, timesteps, 1))
-    targets = np.reshape(data[start: start + timesteps, 1], (-1)).astype(np.int)
-    result_data = np.eye(n_class)[targets]
-    result_data = np.reshape(result_data, [1, timesteps, n_class])
+    targets = np.reshape(data[start: start + timesteps, 1], (-1)).astype(np.int) # target (100, ) -> 1 1 1 1 1 0 1 1 1
+    result_data = np.eye(n_class)[targets] # (100, 5) : [0,1,0,0,0] [1,0,0,0,0]
+    result_data = np.reshape(result_data, [1, timesteps, n_class]) # (100, 5)
     for i in range(batch_size - 1):
         start = random.randint(0, t - timesteps)
         data_ = np.reshape(data[start: start + timesteps, 0], (1, timesteps, 1))
