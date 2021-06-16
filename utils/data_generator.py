@@ -1,29 +1,8 @@
-import tensorflow as tf
 from tensorflow.keras.utils import Sequence
 import os
 import pandas as pd
 import random
 import numpy as np
-
-train_path = './t_class5/'
-val_path = './v_class5/'
-test_path = './v_class5/'
-result = './resutls_c5_t0100_m2/'
-save_weight = result + 'save_weights/'
-save_backup = result + 'back_weights/'
-test_result = result + 'test/'
-
-# os.makedir
-
-# os.listdir
-
-path_arg = {
-    "train": '../t_class5/',
-    "validation": './v_class5/',
-    "test": './v_class5/',
-    "result": '../resutls_c5_t0100_m2/'
-}
-
 
 class DataGenerator(Sequence):
     def __init__(self,
@@ -32,16 +11,12 @@ class DataGenerator(Sequence):
                  shuffle: bool = True):
 
         self.path_args = path_args
-        self.save_weight = self.path_args['result'] + 'save_weights/'
-        self.save_backup = self.path_args['result'] + 'back_weights/'
-        self.test_result = self.path_args['result'] + 'test/'
 
+        # train
         self.train_data = os.listdir(self.path_args['train'])
 
-        os.makedirs(self.save_weight, exist_ok=True)
-        os.makedirs(self.save_backup, exist_ok=True)
-        os.makedirs(self.test_result, exist_ok=True)
-
+        # TODO validation and test dataset
+        # -->
 
         self.timeSteps = 100
         self.num_classes = 5
@@ -72,7 +47,6 @@ class DataGenerator(Sequence):
 
     def get_data_len(self):
         return len(self.x_list), len(self.y_list)
-
 
     def __len__(self):
         return int(np.floor(len(self.x_list) / self.batch_size))

@@ -25,9 +25,9 @@ def check_file(path):
         os.makedirs(path)
 
 
-train_path = './t_class5/'
-val_path = './v_class5/'
-test_path = './v_class5/'
+train_path = 'datasets/t_class5/'
+val_path = 'datasets/v_class5/'
+test_path = 'datasets/v_class5/'
 result = './resutls_c5_t0100_m2/'
 save_weight = result + 'save_weights/'
 save_backup = result + 'back_weights/'
