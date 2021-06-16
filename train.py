@@ -12,9 +12,12 @@ params = config.get_hyperParams()
 tf.keras.backend.clear_session()
 
 
-train_generator = DataGenerator(config.get_dir_path(), batch_size=params['batch_size'], shuffle=True)
-x_len, y_len = train_generator.get_data_len()
-train_steps_per_epoch = x_len // params['batch_size']
+train_generator = DataGenerator(config.get_dir_path(), batch_size=params['batch_size'], shuffle=True, mode='train')
+valid_generator = DataGenerator(config.get_dir_path(), batch_size=params['batch_size'], shuffle=True, mode='validation')
+train_len, _ = train_generator.get_data_len()
+valid_len, _ = valid_generator.get_data_len()
+train_steps_per_epoch = train_len // params['batch_size']
+valid_steps_per_epoch = valid_len // params['batch_size']
 
 
 policy = mixed_precision.Policy('mixed_float16', loss_scale=1024)
@@ -48,6 +51,9 @@ model.compile(loss=ce_loss,
 
 with tf.device('/device:GPU:0'):
     model.fit(train_generator,
+              validation_data=valid_generator,
+              validation_steps=valid_steps_per_epoch,
+              validation_batch_size=params['batch_size'],
               steps_per_epoch=train_steps_per_epoch,
               epochs=params['epoch'],
               callbacks=callback,

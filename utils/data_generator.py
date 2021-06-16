@@ -8,12 +8,14 @@ class DataGenerator(Sequence):
     def __init__(self,
                  path_args,
                  batch_size: int,
-                 shuffle: bool = True):
+                 shuffle: bool,
+                 mode: str):
 
         self.path_args = path_args
+        self.mode = mode
 
         # train
-        self.train_data = os.listdir(self.path_args['train'])
+        self.dataList = os.listdir(self.path_args[self.mode])
 
         # TODO validation and test dataset
         # -->
@@ -30,8 +32,9 @@ class DataGenerator(Sequence):
         self.on_epoch_end()
 
     def load_dataset(self):
-        for i, j in enumerate(self.train_data):
-            data = pd.read_csv(self.path_args['train'] + j).to_numpy()
+        for i, j in enumerate(self.dataList):
+
+            data = pd.read_csv(self.path_args[self.mode] + j).to_numpy()
             # data.shape = (549, 2)
             t, f = data.shape  # t: 549, f: 2
 
