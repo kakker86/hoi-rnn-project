@@ -9,6 +9,8 @@ from model import model
 config = GetConfig()
 params = config.get_hyperParams()
 
+tf.keras.backend.clear_session()
+
 
 train_generator = DataGenerator(config.get_dir_path(), batch_size=params['batch_size'], shuffle=True)
 x_len, y_len = train_generator.get_data_len()
@@ -44,8 +46,11 @@ model.compile(loss=ce_loss,
               metrics=[category_acc, precision, recall])
 
 
-model.fit(train_generator,
-          steps_per_epoch=train_steps_per_epoch,
-          epochs=params['epoch'],
-          callbacks=callback)
+with tf.device('/device:GPU:0'):
+    model.fit(train_generator,
+              steps_per_epoch=train_steps_per_epoch,
+              epochs=params['epoch'],
+              callbacks=callback,
+              batch_size=params['batch_size']
+              )
 
