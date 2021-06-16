@@ -1,18 +1,18 @@
 import os
 import time
 
-EPOCH = 200
-LEARNING_RATE = 0.0001
-BATCH_SIZE = 32
-
-DATASET_DIR = 'datasets/'
-RESULT_DIR = 'checkpoints/'
+hyper_params = {
+                "epoch": 200,
+                "lr": 0.0001,
+                "batch_size": 32
+                }
 
 class GetConfig:
     def __init__(self,
                  data_dir='datasets/',
                  result_dir='checkpoints/'):
 
+        # set dir
         self.data_dir = data_dir
         self.result_dir = result_dir
         self.time = self.get_current_time()
@@ -22,11 +22,16 @@ class GetConfig:
         self.result_dir = result_dir + self.time
         self.tensorboard_dir = result_dir + self.time + '/tensorboard'
 
-        self.create_directory()
-
+        # save file dir
         self.save_weight = os.path.join(self.result_dir + '/save_weights/')
         self.save_backup = os.path.join(self.result_dir + '/back_weights/')
         self.test_result = os.path.join(self.result_dir + '/test/')
+
+        # create dir
+        self.create_directory()
+
+        # train params
+        self.args = hyper_params
 
 
 
@@ -50,6 +55,10 @@ class GetConfig:
             "result": self.result_dir,
             "tensorboard": self.tensorboard_dir
         }
+
+    def get_hyperParams(self):
+        return self.args
+
 
 
 
